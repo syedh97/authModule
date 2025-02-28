@@ -1,0 +1,21 @@
+{
+  "images" : [
+    {
+      "filename" : "Color=Black, Degree=0º, Clay=True, Border (Clay Only)=False.svg",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
