@@ -9,9 +9,10 @@ struct Auth_ModuleApp: App {
     
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @StateObject private var authService = AuthService()
+    @StateObject var viewModel = SignUpViewModel()
     
     init() {
-        
+
     }
     
     var body: some Scene {
@@ -20,6 +21,7 @@ struct Auth_ModuleApp: App {
               //  HomeView()
             ContentView()
            .environmentObject(authService)
+           .environmentObject(viewModel)
                 // Inject the Authentication service into ContentView
                    
         }

@@ -1,10 +1,3 @@
-//
-//  UserDefaults.swift
-//  Auth Module
-//
-//  Created by apple on 27/02/2025.
-//
-
 
 import Foundation
 
@@ -50,8 +43,10 @@ class UserDefaultsManager {
     
     // Method to clear the stored user data
     func clearUserData() {
+        
         defaults.removeObject(forKey: "username")
-        defaults.removeObject(forKey: "email")
-        defaults.removeObject(forKey: "password")
+          defaults.removeObject(forKey: "email")
+          defaults.removeObject(forKey: "password")
+          
     }
 }

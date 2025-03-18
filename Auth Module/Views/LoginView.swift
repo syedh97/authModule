@@ -6,13 +6,12 @@ struct LoginView: View {
     
     @EnvironmentObject var authService: AuthService
     @StateObject private var viewModel = SignUpViewModel()
-    @State private var navigateToSecondView = false
-    @State private var navigateToHomeView = false  // New state variable to control navigation to HomeView
+    @State private var navigateToHomeView = false
+    @Environment(\.dismiss) private var dismiss// Control the navigation to HomeView
     
     var body: some View {
         ZStack {
             BackGround()
-            
             VStack {
                 Image("logoimg2")
                 
@@ -27,7 +26,7 @@ struct LoginView: View {
                 VStack(alignment: .leading, spacing: 12) {
                     FieldsView(username: $viewModel.email, imageicon: "Letter", Labeltxt: "Email:")
                     
-                    PasswordField(password: $viewModel.password, placeholder: "Enter Your Password", imageicon: "Eye")
+                PasswordField(password: $viewModel.password, placeholder: "Enter Your Password", imageicon: "Eye")
                     
                     HStack {
                         Spacer()
@@ -38,7 +37,13 @@ struct LoginView: View {
                     .frame(width: 343, height: 20)
                     
                     SocialView(action: {
-                        authService.signInUser(email: viewModel.email, password: viewModel.password)
+                        // Sign in user and navigate only after successful login
+                      if authService.signInUser(email: viewModel.email, password: viewModel.password){
+                            
+                            //Resetting email and passowrd fields once logged in
+                            viewModel.email = ""
+                            viewModel.password = ""
+                        }
                     }, btntext: "Sign In")
                     
                     SocialView1(imageicon: "Appleicon", action: {
@@ -61,7 +66,7 @@ struct LoginView: View {
                             .foregroundColor(.white)
                         
                         Button(action: {
-                            navigateToSecondView = true
+                           dismiss()
                         }) {
                             Text("Create an Account")
                                 .font(.system(size: 14))
@@ -70,40 +75,24 @@ struct LoginView: View {
                     }
                     .frame(maxWidth: 343, alignment: .center)
                     .padding(.top, 20)
-                    
-                    // Navigation Link to the "SecondView"
-                    NavigationLink(destination: SignUpView(), isActive: $navigateToSecondView) {
-                        EmptyView()
-                    }
-                    
-                }
-                .onAppear {
-                    authService.listenForAuthStateChanges()
+
                 }
                 
-                // Ensure to transition to HomeView as soon as the user is authenticated
-                .onChange(of: authService.isUserAuthenticated) { isAuthenticated in
-                    if isAuthenticated {
-                        // Once the user is authenticated, trigger navigation to HomeView
-                        DispatchQueue.main.async {
-                            navigateToHomeView = true
-                        }
-                    }
+                // Navigation to HomeView once the user is authenticated
+                NavigationLink(destination: HomeView(), isActive: $navigateToHomeView) {
+                   EmptyView()  // Hidden trigger for HomeView navigation
                 }
             }
             .navigationBarBackButtonHidden(true)
-            .background(
-                NavigationLink(destination: HomeView(), isActive: $navigateToHomeView) {
-                    EmptyView()  // Hidden trigger for HomeView navigation
+        }
+        .onChange(of: authService.isUserAuthenticated) { isAuthenticated in
+            if isAuthenticated {
+                // Once the user is authenticated, navigate to HomeView
+                DispatchQueue.main.async {
+                    navigateToHomeView = true
                 }
-                .hidden()
-            )
+            }
         }
     }
-}
-
-#Preview {
-    LoginView()
-        .environmentObject(AuthService())
 }
 

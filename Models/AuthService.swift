@@ -11,7 +11,10 @@ enum AuthenticationError: Error {
 class AuthService: ObservableObject {
     @Published var isUserAuthenticated = false
     @Published var isUserCreated = false
-    @Published var signedInEmail: String = ""  // Add signed-in email for display
+    @Published var signedInEmail: String = ""
+    
+    private var db = Firestore.firestore()
+
 
     // Regular Sign Up with Email & Password
     func regularCreateAccount(email: String, password: String) {
@@ -21,15 +24,13 @@ class AuthService: ObservableObject {
                 return
             }
             self.isUserCreated = true
-            
-            
-            //self.isUserAuthenticated = true
             print("User created successfully with UID: \(result?.user.uid ?? "")")
         }
     }
+    
 
     // Sign In with Email & Password
-    func signInUser(email: String, password: String) {
+    func signInUser(email: String, password: String) -> Bool{
         Auth.auth().signIn(withEmail: email, password: password) { result, error in
             if let error = error {
                 print("Error signing in: \(error.localizedDescription)")
@@ -38,11 +39,14 @@ class AuthService: ObservableObject {
             
             self.signedInEmail = email
             self.isUserAuthenticated = true
-            
             print("User signed in successfully with UID: \(result?.user.uid ?? "")")
+
             print("User signed in with email: \(email)")
+            
         }
+        return true
     }
+    
 
     // Google Sign-In Integration
     @MainActor
@@ -76,29 +80,29 @@ class AuthService: ObservableObject {
         print("User signed in with Google, UID: \(authResult.user.uid)")
     }
 
-    // Sign Out
     func signOut() async throws {
         do {
+            // Sign out from Google
             try await GIDSignIn.sharedInstance.signOut()
+            
+            // Sign out from Firebase
             try Auth.auth().signOut()
-            self.isUserAuthenticated = false
-            self.signedInEmail = ""
-            print("User signed out successfully.")
+            
+            // Ensure updates to @Published properties happen on the main thread
+              DispatchQueue.main.async {
+                  
+                self.isUserAuthenticated = false
+                self.signedInEmail = ""
+                  // Clear data from UserDefaults
+                UserDefaultsManager.shared.clearUserData()
+                print("User signed out successfully.")
+            }
+            
         } catch {
             print("Error signing out: \(error.localizedDescription)")
             throw error
         }
     }
 
-    // Listen for auth state changes
-    func listenForAuthStateChanges() {
-        Auth.auth().addStateDidChangeListener { _, user in
-            if user != nil {
-                self.isUserAuthenticated = true
-            } else {
-                self.isUserAuthenticated = false
-            }
-        }
-    }
 }
 

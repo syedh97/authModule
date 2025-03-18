@@ -13,8 +13,7 @@ struct SplashScreen: View {
         ZStack{
             BackGround()
             VStack {
-                
-                
+
                 // Add an image or logo for your splash screen
                 Image("logoimg")  // Replace with your own logo image
                     .resizable()

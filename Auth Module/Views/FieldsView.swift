@@ -1,9 +1,3 @@
-//
-//  FieldsView.swift
-//  Auth Module
-//
-//  Created by apple on 26/02/2025.
-//
 
 import SwiftUI
 struct FieldsView: View {
@@ -12,10 +6,7 @@ struct FieldsView: View {
     @State var imageicon: String
     @State var Labeltxt: String
     
-    
     var body: some View {
-        
-        
         
         VStack (alignment: .leading, spacing: 10) {
             
@@ -47,9 +38,7 @@ struct FieldsView: View {
             }
             
         }
-        
-        
-        
+  
     }
     
     

@@ -12,11 +12,10 @@ struct MainView: View {
                 
                 BackGround()  // Ensure this is the full-screen background
                 
-                
                 Image("iPhone14img")
                 
                 LinearGradient(gradient: Gradient(colors: [.newbg.opacity(0), .black]),
-                               startPoint: .top,
+                            startPoint: .top,
                                endPoint: .bottom)
                 
                 VStack(spacing: 30){

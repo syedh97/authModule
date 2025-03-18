@@ -13,11 +13,11 @@ class SignUpViewModel: ObservableObject {
     
     private let userDefaultsManager = UserDefaultsManager.shared
     
-        @Published var userName: String = "test"
-        @Published var email: String = "test@test.com"
-        @Published var password: String = "test123"
+        @Published var userName: String = ""
+        @Published var email: String = ""
+        @Published var password: String = ""
 
-    
+
     // Method to handle sign-up and store data in UserDefaults
     func signUpUser() {
         guard !userName.isEmpty, !email.isEmpty, !password.isEmpty else {

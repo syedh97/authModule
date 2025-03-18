@@ -1,43 +1,45 @@
 import SwiftUI
-import FirebaseAuth
 
 struct HomeView: View {
     @EnvironmentObject var authService: AuthService
-
+    @StateObject private var viewModel = SignUpViewModel()
+    
     var body: some View {
-        NavigationStack {
-            VStack {
-                Text("Welcome, \(authService.signedInEmail) to the Home View!")
-                    .font(.largeTitle)
-                    .padding()
-
-                Button("Log Out") {
-                    // Sign out the user and set isUserAuthenticated to false
-                    try? Auth.auth().signOut()
-                    authService.isUserAuthenticated = false
+        
+            TabView {
+                // First Tab: Home View
+                ZStack {
+                    BackGround()
+                    VStack {
+                        Text("Welcome, \(authService.signedInEmail) to the Home View!")
+                            .font(.largeTitle)
+                            .foregroundColor(.white)
+                            .padding()
+                        
+                        // Additional content can go here
+                    }
                 }
-                .padding()
-                .background(Color.red)
-                .foregroundColor(.white)
-                .cornerRadius(8)
+                .tabItem {
+                    Label("Home", systemImage: "house")
+                }
                 
-                // Navigation Link to go back to the Sign-In screen when the user is not authenticated
-                NavigationLink(
-                    destination: LoginView(), // Your sign-in view
-                    isActive: .constant(!authService.isUserAuthenticated) // If not authenticated, show sign-in
-                ) {
-                    EmptyView() // The link is invisible
-                }
+                // Second Tab: Profile View
+                Cards() // Make sure Cards() is inside the TabView
+                    .tabItem {
+                        Label("Profiles", systemImage: "person.crop.circle.fill")
+                    }
             }
-            .navigationBarBackButtonHidden(true)  // Hide the back button
-        }
+
+        .navigationBarBackButtonHidden(true)
     }
 }
 
-struct HomeView_Previews: PreviewProvider {
-    static var previews: some View {
-        HomeView()
-            .environmentObject(AuthService())  // Provide the AuthService in the preview
-    }
+#Preview {
+    // Initialize AuthService and SignUpViewModel
+    let authService = AuthService()
+    authService.isUserAuthenticated = true  // Simulating an authenticated user
+    authService.signedInEmail = "example@gmail.com"  // Simulated email
+    
+    return HomeView()
+        .environmentObject(authService)
 }
-

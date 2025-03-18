@@ -33,6 +33,11 @@
 			path = ViewModel;
 			sourceTree = "<group>";
 		};
+		18E4F20E2D842ECE0039C1A7 /* Fonts */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Fonts;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +58,7 @@
 		188AED762D6D9E19004F5D06 = {
 			isa = PBXGroup;
 			children = (
+				18E4F20E2D842ECE0039C1A7 /* Fonts */,
 				188AED812D6D9E19004F5D06 /* Auth Module */,
 				188AED802D6D9E19004F5D06 /* Products */,
 				18BD91E22D702A9B0056D728 /* Models */,
@@ -87,6 +93,7 @@
 				188AED812D6D9E19004F5D06 /* Auth Module */,
 				18BD91E22D702A9B0056D728 /* Models */,
 				18BD91E52D702B610056D728 /* ViewModel */,
+				18E4F20E2D842ECE0039C1A7 /* Fonts */,
 			);
 			name = "Auth Module";
 			packageProductDependencies = (
